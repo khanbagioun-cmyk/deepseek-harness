@@ -66,11 +66,20 @@ jobs:
           } | Set-Content SHA256SUMS-${{ matrix.target }}
           Get-Content SHA256SUMS-${{ matrix.target }}
       - uses: actions/upload-artifact@v4
+        if: runner.os == 'macOS'
         with:
           name: codez-${{ matrix.target }}
           path: |
             apps/desktop/.desktop-build/targets/${{ matrix.target }}/unsigned-artifacts/**/*.dmg
-            apps/desktop/.desktop-build/targets/${{ matrix.target }}/unsigned-artifacts/**/*.exe
+            SHA256SUMS-${{ matrix.target }}
+          if-no-files-found: error
+          retention-days: 14
+      - uses: actions/upload-artifact@v4
+        if: runner.os == 'Windows'
+        with:
+          name: codez-${{ matrix.target }}
+          path: |
+            apps/desktop/.desktop-build/targets/${{ matrix.target }}/unsigned-artifacts/codez-*-unsigned.exe
             SHA256SUMS-${{ matrix.target }}
           if-no-files-found: error
           retention-days: 14
