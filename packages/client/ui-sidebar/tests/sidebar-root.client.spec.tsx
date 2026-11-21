@@ -264,8 +264,10 @@ describe('SidebarRoot shell', () => {
         options?.fallback ?? null) as SidebarRootComponentProps['renderSlot']}
     />)
 
-    expect(screen.getByText('DSH Local Build')).toBeTruthy()
-    expect(screen.getByText('1.2.3-rc.4-0123456-dirty')).toBeTruthy()
+    expect(screen.queryByText('CodeZ Local Build')).toBeNull()
+    expect(container.querySelector('img[src="/brand/codez-symbol.svg"]')).not.toBeNull()
+    expect(container.querySelector('[style*="codez-wordmark.svg"]')).not.toBeNull()
+    expect(container.querySelector('[data-copy-version]')!.getAttribute('title')).toBe('1.2.3-rc.4-0123456-dirty')
     expect(container.querySelector('svg')).not.toBeNull()
   })
 
@@ -274,7 +276,7 @@ describe('SidebarRoot shell', () => {
     [{ DSH_CLIENT_COMMIT_HASH: 'abcdef0', DSH_CLIENT_VERSION: '1.2.3' }, '1.2.3-abcdef0'],
   ])('omits unavailable build-version suffixes from %j', (environment, expected) => {
     for (const [name, value] of Object.entries(environment)) vi.stubEnv(name, value)
-    render(<SidebarRoot
+    const { container } = render(<SidebarRoot
       drawer={false}
       collapsed={false} width={300}
       useSessions={neverHook} useSessionStatus={useSessionStatus} useSessionRetainInfo={neverHook}
@@ -289,8 +291,9 @@ describe('SidebarRoot shell', () => {
         options?.fallback ?? null) as SidebarRootComponentProps['renderSlot']}
     />)
 
-    expect(screen.getByText('DSH Local Build')).toBeTruthy()
-    expect(screen.getByText(expected)).toBeTruthy()
+    expect(screen.queryByText('CodeZ Local Build')).toBeNull()
+    expect(container.querySelector('[style*="codez-wordmark.svg"]')).not.toBeNull()
+    expect(container.querySelector('[data-copy-version]')!.getAttribute('title')).toBe(expected)
   })
 
   it.each([false, true])('copies the local-build version from the fallback mark and name (darwin=%s)', async (darwin) => {
@@ -320,23 +323,21 @@ describe('SidebarRoot shell', () => {
     vi.useFakeTimers()
 
     const copiedToasts = () => screen.queryAllByRole('alert').map(toast => toast.textContent)
-    await act(async () => { fireEvent.click(screen.getByText('DSH Local Build')) })
+    const mark = document.querySelector<HTMLElement>('[data-copy-version]')!
+    expect(mark.getAttribute('title')).toBe('1.2.3-abcdef0')
+    await act(async () => { fireEvent.click(mark) })
     expect(writeText).toHaveBeenLastCalledWith('1.2.3-abcdef0')
     expect(copiedToasts()).toEqual(['Version copied'])
-    // The brand itself keeps its title and version.
-    expect(screen.getByText('DSH Local Build')).toBeTruthy()
-    expect(screen.getByText('1.2.3-abcdef0')).toBeTruthy()
     act(() => { vi.advanceTimersByTime(4000) })
     expect(copiedToasts()).toEqual([])
 
     // A refused write claims no success.
-    await act(async () => { fireEvent.click(screen.getByText('1.2.3-abcdef0')) })
+    await act(async () => { fireEvent.click(mark) })
     expect(copiedToasts()).toEqual([])
 
-    // The fallback mark copies too, and its click still reaches document.
+    // Its click still reaches document without starting a session.
     const documentClick = vi.fn()
     document.addEventListener('click', documentClick)
-    const mark = screen.getByText('DSH Local Build').closest('[aria-hidden]')!.querySelector('svg')!
     await act(async () => { fireEvent.click(mark) })
     document.removeEventListener('click', documentClick)
     expect(documentClick).toHaveBeenCalledOnce()
@@ -355,7 +356,7 @@ describe('SidebarRoot shell', () => {
   })
 
   it('retains the local-build fallback without complete build metadata', () => {
-    render(<SidebarRoot
+    const { container } = render(<SidebarRoot
       drawer={false}
       collapsed={false} width={300}
       useSessions={neverHook} useSessionStatus={useSessionStatus} useSessionRetainInfo={neverHook}
@@ -370,7 +371,10 @@ describe('SidebarRoot shell', () => {
         options?.fallback ?? null) as SidebarRootComponentProps['renderSlot']}
     />)
 
-    expect(screen.getByText('DSH Local Build')).toBeTruthy()
+    expect(screen.queryByText('CodeZ Local Build')).toBeNull()
+    expect(container.querySelector('img[src="/brand/codez-symbol.svg"]')).not.toBeNull()
+    expect(container.querySelector('[style*="codez-wordmark.svg"]')).not.toBeNull()
+    expect(container.querySelector('[data-copy-version]')).toBeNull()
   })
 
   it('hands the region its wide flag and clamps expandSidebar to the collapsed state', () => {

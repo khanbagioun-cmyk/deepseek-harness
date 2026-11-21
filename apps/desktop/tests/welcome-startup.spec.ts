@@ -68,6 +68,7 @@ vi.mock('electron', () => ({
     exit: vi.fn(),
   },
   powerMonitor: { on: vi.fn(), off: vi.fn() },
+  screen: { getAllDisplays: () => [{ workArea: { x: 0, y: 0, width: 1440, height: 900 } }] },
   BrowserWindow: class {
     constructor(options: BrowserWindowConstructorOptions) { state.windowOptions = options }
     private ready: (() => void) | undefined
@@ -84,6 +85,9 @@ vi.mock('electron', () => ({
     hide = vi.fn()
     show = state.showWorkspace
     showInactive = state.showInactiveWorkspace
+    getBounds() { return { x: 0, y: 0, width: 1280, height: 820 } }
+    setPosition = vi.fn()
+    center = vi.fn()
     async loadURL(url: string) { state.contents = this.webContents; await state.loadWorkspace(url); this.ready?.() }
   },
   nativeTheme: state.nativeTheme,

@@ -21,12 +21,14 @@ import {
   nativeImage,
   nativeTheme,
   protocol,
+  screen,
   session,
   shell,
   type IpcMainInvokeEvent,
   type MenuItemConstructorOptions,
 } from 'electron'
 import { resolveDesktopPaths } from './paths.ts'
+import { placementFor } from './window-placement.ts'
 import { DesktopProjectManager } from './project-manager.ts'
 import { DesktopHostFatalError, DesktopHostProcess, DesktopHostUncleanExitError } from './host-process.ts'
 import { DesktopPlatformView, PLATFORM_IPC, platformBounds } from './platform-view.ts'
@@ -71,6 +73,13 @@ import { DesktopUpdateOverlays } from './update-overlay.ts'
 import { DesktopQuitConfirmation } from './quit-confirmation.ts'
 import { DesktopTray } from './tray.ts'
 import { DesktopBackgroundNotice } from './background-notice.ts'
+
+// CodeZ owns its Electron data and Harness home, so it can run beside a DeepSeek Harness install.
+app.setName('CodeZ')
+const isolatedUserData = process.env.DSH_DESKTOP_USER_DATA_DIR?.trim()
+if (isolatedUserData !== undefined && isolatedUserData !== '') app.setPath('userData', isolatedUserData)
+else if (app.isPackaged) app.setPath('userData', join(app.getPath('appData'), 'CodeZ'))
+if ((process.env.DSH_HOME ?? '').trim() === '') process.env.DSH_HOME = join(app.getPath('userData'), 'home')
 
 let focusPrimaryWindow = (): void => {}
 let stopForRecovery = async (): Promise<void> => { await stopOperationReports() }
@@ -258,6 +267,15 @@ function platformLoginUrl(authorizeUrl: string): string {
   const url = new URL(authorizeUrl)
   url.searchParams.set('theme', nativeTheme.shouldUseDarkColors ? 'dark' : 'light')
   return url.href
+}
+
+/**
+ * Centre a window the display restore left entirely outside every work area.
+ * @param window - window whose restored bounds are checked.
+ */
+function keepWindowOnScreen(window: BrowserWindow): void {
+  const placement = placementFor(window.getBounds(), screen.getAllDisplays())
+  if (placement !== undefined) window.setPosition(placement.x, placement.y)
 }
 
 function createWindow(preload: string, show = false, primary = false): BrowserWindow {
@@ -1131,7 +1149,7 @@ async function main(): Promise<void> {
   const applicationIconPath = development ? join(app.getAppPath(), 'resources', 'icon-windows.png')
     : join(process.resourcesPath, 'icon.png')
   app.setAboutPanelOptions({
-    applicationName: 'DeepSeek Harness',
+    applicationName: 'CodeZ',
     applicationVersion: app.getVersion(),
     // The release has no separate build number; omit Electron's bundle version.
     version: '',
@@ -1294,6 +1312,7 @@ async function main(): Promise<void> {
   }
   const createMainWindow = (): BrowserWindow => {
     const window = createWindow(appPreload, false, true)
+    keepWindowOnScreen(window)
     mainWindow = window
     browserGuests.bind(window, (guest, name) => shortcuts.attachGuest(window, guest, name))
     shortcuts.attach(window)

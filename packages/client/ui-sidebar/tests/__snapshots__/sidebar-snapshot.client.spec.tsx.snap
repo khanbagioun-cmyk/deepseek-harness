@@ -130,13 +130,13 @@ exports[`sidebar shell snapshots > renders Windows caption controls in expanded 
               <span
                 class="copyVersion"
                 data-copy-version="true"
+                title="1.2.3-rc.4-abc1234-dirty"
               >
-                <svg
-                  aria-hidden="true"
-                  data-content="965fe321"
-                  fill="none"
-                  height="17.6580310880829"
-                  viewBox="0 0 23.16 17.04"
+                <img
+                  alt=""
+                  height="24"
+                  src="/brand/codez-symbol.svg"
+                  style="display: block;"
                   width="24"
                 />
               </span>
@@ -150,19 +150,12 @@ exports[`sidebar shell snapshots > renders Windows caption controls in expanded 
               style="display: contents;"
             >
               <span
-                class="localBuildBrand copyVersion"
-                data-copy-version="true"
+                aria-hidden="true"
+                style="display: inline-flex; align-items: center; gap: 5.3999999999999995px; white-space: nowrap;"
               >
                 <span
-                  class="localBuildTitle"
-                >
-                  DSH Local Build
-                </span>
-                <span
-                  class="buildVersion"
-                >
-                  1.2.3-rc.4-abc1234-dirty
-                </span>
+                  style="display: block; width: 64.66193999999999px; height: 17.099999999999998px; background-color: currentcolor; -webkit-mask-image: url("/brand/codez-wordmark.svg"); mask-image: url("/brand/codez-wordmark.svg"); -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; -webkit-mask-size: contain; mask-size: contain;"
+                />
               </span>
             </div>
           </span>
@@ -282,12 +275,11 @@ exports[`sidebar shell snapshots > renders the collapsed rail after the crossfad
             data-slot="sidebar.brand.mark"
             style="display: contents;"
           >
-            <svg
-              aria-hidden="true"
-              data-content="965fe321"
-              fill="none"
-              height="17.6580310880829"
-              viewBox="0 0 23.16 17.04"
+            <img
+              alt=""
+              height="24"
+              src="/brand/codez-symbol.svg"
+              style="display: block;"
               width="24"
             />
           </div>
@@ -403,13 +395,13 @@ exports[`sidebar shell snapshots > renders the expanded column (wordmark, capsul
               <span
                 class="copyVersion"
                 data-copy-version="true"
+                title="1.2.3-rc.4-abc1234-dirty"
               >
-                <svg
-                  aria-hidden="true"
-                  data-content="965fe321"
-                  fill="none"
-                  height="17.6580310880829"
-                  viewBox="0 0 23.16 17.04"
+                <img
+                  alt=""
+                  height="24"
+                  src="/brand/codez-symbol.svg"
+                  style="display: block;"
                   width="24"
                 />
               </span>
@@ -423,19 +415,12 @@ exports[`sidebar shell snapshots > renders the expanded column (wordmark, capsul
               style="display: contents;"
             >
               <span
-                class="localBuildBrand copyVersion"
-                data-copy-version="true"
+                aria-hidden="true"
+                style="display: inline-flex; align-items: center; gap: 5.3999999999999995px; white-space: nowrap;"
               >
                 <span
-                  class="localBuildTitle"
-                >
-                  DSH Local Build
-                </span>
-                <span
-                  class="buildVersion"
-                >
-                  1.2.3-rc.4-abc1234-dirty
-                </span>
+                  style="display: block; width: 64.66193999999999px; height: 17.099999999999998px; background-color: currentcolor; -webkit-mask-image: url("/brand/codez-wordmark.svg"); mask-image: url("/brand/codez-wordmark.svg"); -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; -webkit-mask-size: contain; mask-size: contain;"
+                />
               </span>
             </div>
           </span>
@@ -560,13 +545,13 @@ exports[`sidebar shell snapshots > renders the expanded column in the default lo
               <span
                 class="copyVersion"
                 data-copy-version="true"
+                title="1.2.3-rc.4-abc1234-dirty"
               >
-                <svg
-                  aria-hidden="true"
-                  data-content="965fe321"
-                  fill="none"
-                  height="17.6580310880829"
-                  viewBox="0 0 23.16 17.04"
+                <img
+                  alt=""
+                  height="24"
+                  src="/brand/codez-symbol.svg"
+                  style="display: block;"
                   width="24"
                 />
               </span>
@@ -580,19 +565,12 @@ exports[`sidebar shell snapshots > renders the expanded column in the default lo
               style="display: contents;"
             >
               <span
-                class="localBuildBrand copyVersion"
-                data-copy-version="true"
+                aria-hidden="true"
+                style="display: inline-flex; align-items: center; gap: 5.3999999999999995px; white-space: nowrap;"
               >
                 <span
-                  class="localBuildTitle"
-                >
-                  DSH 本地构建
-                </span>
-                <span
-                  class="buildVersion"
-                >
-                  1.2.3-rc.4-abc1234-dirty
-                </span>
+                  style="display: block; width: 64.66193999999999px; height: 17.099999999999998px; background-color: currentcolor; -webkit-mask-image: url("/brand/codez-wordmark.svg"); mask-image: url("/brand/codez-wordmark.svg"); -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; -webkit-mask-size: contain; mask-size: contain;"
+                />
               </span>
             </div>
           </span>

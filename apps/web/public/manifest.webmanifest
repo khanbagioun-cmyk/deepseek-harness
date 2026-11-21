@@ -1,12 +1,24 @@
 {
-  "name": "DeepSeek Harness",
-  "short_name": "DSH",
+  "name": "CodeZ",
+  "short_name": "CodeZ",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#ffffff",
+  "background_color": "#0d0528",
+  "theme_color": "#0d0528",
   "icons": [
+    {
+      "src": "favicon-32.png",
+      "sizes": "32x32",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "favicon-64.png",
+      "sizes": "64x64",
+      "type": "image/png",
+      "purpose": "any"
+    },
     {
       "src": "icon-192.png",
       "sizes": "192x192",

@@ -33,7 +33,7 @@ function remoteFail(message: string) {
   return { ok: false as const, error: new RemoteError('gateway/internal', message, {}) }
 }
 
-const DeepSeekConfig = Schema.object({
+const CompanyProfile = Schema.object({
   apiKeyEnv: Schema.string().role('credential-ref'),
   baseURL: Schema.string().pattern(/^https:\/\//),
   reasoningEffort: Schema.union(['off', 'low', 'high', 'max']),
@@ -45,16 +45,17 @@ const DeepSeekConfig = Schema.object({
     contextWindow: Schema.number().step(1).min(1),
   })),
 })
+const CompanyConfig = Schema.object({ providers: Schema.object({ zharfa: CompanyProfile }) })
 
 type AttentionSnapshot = Parameters<Parameters<DeepSeekOnboardingDialogProps['useSessionStatus']>[0]>[0]
 const noAttention: AttentionSnapshot = new Map()
 const useSessionStatus: DeepSeekOnboardingDialogProps['useSessionStatus'] = selector => selector(noAttention)
 
 function deepSeekNamespace(apiKeyEnv: string | null): SettingsNamespaceView {
-  const value = apiKeyEnv === null ? {} : { apiKeyEnv }
+  const value = { providers: { zharfa: apiKeyEnv === null ? {} : { apiKeyEnv } } }
   return {
-    ns: 'llm-deepseek',
-    schema: JSON.parse(JSON.stringify(DeepSeekConfig.toJSON())) as JsonValue,
+    ns: 'llm-pi-ai',
+    schema: JSON.parse(JSON.stringify(CompanyConfig.toJSON())) as JsonValue,
     value,
     base: value,
     user: {},
@@ -84,7 +85,7 @@ function harness(options: {
   }
   let fileConfigured = false
   const configured = options.configured ?? (() => fileConfigured)
-  const apiKeyEnv = options.apiKeyEnv === undefined ? 'DEEPSEEK_API_KEY' : options.apiKeyEnv
+  const apiKeyEnv = options.apiKeyEnv === undefined ? 'ZHARFA_API_KEY' : options.apiKeyEnv
   const mutate = vi.fn(() => Promise.resolve(remoteOk(deepSeekNamespace(apiKeyEnv))))
   const set = vi.fn((_ref: string, _value: string) => {
     if (options.setFailure !== undefined) return Promise.resolve(remoteFail(options.setFailure))
@@ -98,17 +99,17 @@ function harness(options: {
         return Promise.resolve(remoteOk(
           options.provider === false || options.providerActive === false
             ? []
-            : [{ id: 'deepseek-official', name: 'DeepSeek' }],
+            : [{ id: 'zharfa', name: 'Zharfa API' }],
         ))
       },
       listConfigurableProviders: () => Promise.resolve(remoteOk(
         options.provider === false
           ? []
           : [{
-            provider: 'deepseek-official',
-            displayName: 'DeepSeek',
-            settingsNs: options.providerSettingsNs ?? 'llm-deepseek',
-            settingsPath: [],
+            provider: 'zharfa',
+            displayName: 'Zharfa API',
+            settingsNs: options.providerSettingsNs ?? 'llm-pi-ai',
+            settingsPath: ['providers', 'zharfa'],
           }],
       )),
       discoverModels: () => Promise.resolve(remoteOk([])),
@@ -124,7 +125,7 @@ function harness(options: {
     credentials: {
       describe: () => options.describeFailure === undefined
         ? Promise.resolve(remoteOk({
-          DEEPSEEK_API_KEY: {
+          [apiKeyEnv ?? 'ZHARFA_API_KEY']: {
             configured: configured(),
             ...configured() && options.credential?.source !== undefined
               ? { source: options.credential.source }
@@ -145,7 +146,7 @@ function harness(options: {
   const unusedHook = (() => { throw new Error('unused standard hook') }) as never
   const props: DeepSeekOnboardingDialogProps = {
     automatic: true,
-    stepId: 'deepseek-official',
+    stepId: 'zharfa',
     complete,
     openSection,
     renderSlot: (_name, _props, options) => options?.fallback,

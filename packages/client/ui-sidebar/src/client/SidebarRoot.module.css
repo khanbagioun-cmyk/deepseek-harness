@@ -303,6 +303,10 @@
   letter-spacing: 0.04em;
 }
 
+.brandName:empty {
+  display: none;
+}
+
 .fallbackBrandName {
   font-size: 17px;
   letter-spacing: 0px;

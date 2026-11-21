@@ -2,11 +2,14 @@
 import { describe, expect, it, vi } from 'vitest'
 import { connectDesktopWelcome } from '../src/welcome-backend.ts'
 
-function transport(preference?: string) {
+function transport(preference?: string, company = true) {
   const keys = new Map<string, string>()
   const namespaces = [
     { ns: 'llm-deepseek', value: { apiKeyEnv: 'CUSTOM_DEEPSEEK_KEY' } },
-    { ns: 'llm-pi-ai', value: { profiles: { example: { apiKeyEnv: 'EXAMPLE_API_KEY' } } } },
+    { ns: 'llm-pi-ai', value: { providers: {
+      ...company ? { zharfa: { apiKeyEnv: 'AXON_LAB_KEY' } } : {},
+      example: { apiKeyEnv: 'EXAMPLE_API_KEY' },
+    } } },
     { ns: 'locale', value: preference === undefined ? {} : { preference } },
   ]
   const send = vi.fn<NonNullable<Parameters<typeof connectDesktopWelcome>[2]>>(async (_input, init) => {
@@ -18,7 +21,10 @@ function transport(preference?: string) {
     let value: unknown
     if (method === 'account/getState') value = { links: { usageUrl: 'http://localhost/usage', topUpUrl: 'http://localhost/top_up' }, status: 'signed-out', attempt: null }
     else if (method === 'settings/describe') value = { namespaces }
-    else if (method === 'llm/listConfigurableProviders') value = [{ settingsNs: 'llm-pi-ai', settingsPath: ['profiles', 'example'] }]
+    else if (method === 'llm/listConfigurableProviders') value = [
+      { settingsNs: 'llm-pi-ai', settingsPath: ['providers', 'zharfa'] },
+      { settingsNs: 'llm-pi-ai', settingsPath: ['providers', 'example'] },
+    ]
     else if (method === 'productAnalytics/enabled') value = true
     else if (method === 'productAnalytics/report') value = undefined
     else if (method === 'credentials/set') keys.set(payload.args.ref, payload.args.value)
@@ -37,7 +43,7 @@ describe('desktop welcome Web operations', () => {
     const backend = connectDesktopWelcome(url, cookie, host.send)
     expect(await backend.analyticsEnabled()).toBe(true)
     expect(await backend.save('sk-example')).toEqual({ ok: true })
-    expect(host.keys.get('CUSTOM_DEEPSEEK_KEY')).toBe('sk-example')
+    expect(host.keys.get('AXON_LAB_KEY')).toBe('sk-example')
     expect(await backend.read()).toEqual({ loggedIn: false, hasApiKey: true, writable: true, localePreference: null })
     for (const [input, init] of host.send.mock.calls) {
       expect(input).toMatch(/^http:\/\/127\.0\.0\.1:19387\/api\//u)
@@ -65,9 +71,8 @@ describe('desktop welcome Web operations', () => {
     expect(host.send.mock.calls[0]![0]).toContain('/api/settings/describe')
   })
 
-  it('allows profiles without the official provider and retains custom key detection', async () => {
-    const host = transport()
-    host.namespaces.splice(0, 1)
+  it('allows profiles without the company provider and retains custom key detection', async () => {
+    const host = transport(undefined, false)
     const backend = connectDesktopWelcome(url, cookie, host.send)
     expect(await backend.read()).toMatchObject({ hasApiKey: false, writable: false })
     host.keys.set('EXAMPLE_API_KEY', 'custom-key')

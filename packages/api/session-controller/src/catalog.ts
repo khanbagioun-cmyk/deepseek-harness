@@ -62,8 +62,10 @@ export async function buildModelCatalog(
       }
     }
   }))
+  const order = new Map([['zharfa', 0], ['zharfa-qwen', 1], ['deepseek-account', 2], ['deepseek-official', 3]])
   const groups = catalog.flatMap(item => item.kind === 'group' ? [item.group] : [])
     .filter(group => group.models.length > 0)
+    .sort((left, right) => (order.get(left.id) ?? 4) - (order.get(right.id) ?? 4))
   return {
     default: { ...defaultSelection },
     routableProviders: groups.map(group => group.id),

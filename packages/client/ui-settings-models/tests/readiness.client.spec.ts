@@ -9,15 +9,15 @@ const missingCredential: CredentialInfo = { configured: false, writable: true }
 function row(overrides: Partial<ProviderRow> = {}): ProviderRow {
   return {
     entry: {
-      provider: 'deepseek-official',
-      displayName: 'DeepSeek',
-      settingsNs: 'llm-deepseek',
-      settingsPath: [],
+      provider: 'zharfa',
+      displayName: 'Zharfa API',
+      settingsNs: 'llm-pi-ai',
+      settingsPath: ['providers', 'zharfa'],
       active: true,
     },
     configured: true,
     removable: false,
-    apiKeyEnv: 'DEEPSEEK_API_KEY',
+    apiKeyEnv: 'ZHARFA_API_KEY',
     credential: missingCredential,
     ...overrides,
   }
@@ -85,8 +85,8 @@ describe('onboardingReadiness', () => {
     expect(onboardingReadiness(state())).toEqual({ kind: 'credential-missing' })
   })
 
-  it('ends onboarding once any other registered provider can serve requests', () => {
-    expect(onboardingReadiness(state({ rows: [row(), otherRow()] }))).toEqual({ kind: 'provider-ready' })
+  it('keeps onboarding until the company route can serve requests', () => {
+    expect(onboardingReadiness(state({ rows: [row(), otherRow()] }))).toEqual({ kind: 'credential-missing' })
     // A provider the user cannot reach yet leaves the prompt in place.
     expect(onboardingReadiness(state({
       rows: [row(), otherRow({ credential: missingCredential })],

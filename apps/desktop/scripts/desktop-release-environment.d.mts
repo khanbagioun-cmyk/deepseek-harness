@@ -1,6 +1,9 @@
 /** Environment variable that supplies the Electron application identifier. */
 export const DESKTOP_APP_ID_ENV: 'DSH_DESKTOP_APP_ID'
 
+/** Application identifier used when the packaging environment supplies none. */
+export const DEFAULT_DESKTOP_APP_ID: string
+
 /** Environment variable that supplies electron-builder's macOS certificate qualifier. */
 export const MACOS_SIGNING_IDENTITY_ENV: 'DSH_DESKTOP_MACOS_SIGNING_IDENTITY'
 
@@ -45,7 +48,7 @@ export type MacOSNotarizationEnvironment =
 /**
  * Resolve and validate the application identifier shared by every platform target.
  * @param env - Packaging environment.
- * @returns Reverse-DNS application identifier.
+ * @returns Reverse-DNS application identifier, {@link DEFAULT_DESKTOP_APP_ID} when unset.
  */
 export function resolveDesktopAppId(env: NodeJS.ProcessEnv): string
 

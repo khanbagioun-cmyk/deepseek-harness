@@ -18,6 +18,7 @@ import { ProviderEditor } from './ProviderEditor.tsx'
 import type {} from './slot-contract.ts'
 import type { en } from './locales.ts'
 import { OnboardingModal } from './OnboardingModal.tsx'
+import { COMPANY_SETTINGS_NS, isCompanyProvider } from './company.ts'
 import styles from './DeepSeekOnboardingDialog.module.css'
 
 /** Registration-side dependencies of {@link DeepSeekOnboardingDialog}. */
@@ -92,10 +93,8 @@ export function DeepSeekOnboardingDialog(props: DeepSeekOnboardingDialogProps): 
   }
 
   const row = state.rows.find(candidate =>
-    candidate.entry.provider === 'deepseek-official'
-    && candidate.entry.settingsNs === 'llm-deepseek'
-    && candidate.entry.settingsPath.length === 0)
-  const namespace = state.namespaces.get('llm-deepseek')
+    isCompanyProvider(candidate.entry.provider) && candidate.entry.settingsNs === COMPANY_SETTINGS_NS)
+  const namespace = state.namespaces.get(COMPANY_SETTINGS_NS)
   /* v8 ignore next 2 -- credential-missing is derived only from this exact joined row. */
   if (row === undefined || namespace === undefined) return null
 

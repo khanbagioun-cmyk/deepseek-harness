@@ -15,6 +15,7 @@ import type { SnapshotStore } from '@deepseek-ai/dsh-client-store'
 import { createSnapshotStore } from '@deepseek-ai/dsh-client-store'
 import type { SettingsDescribeFace } from '@deepseek-ai/dsh-client-ui-settings/client'
 import type { SettingsSchemaOperations } from './schema-operations.ts'
+import { COMPANY_SETTINGS_NS, COMPANY_SETTINGS_PATH, isCompanyProvider, providerRank } from './company.ts'
 
 /**
  * Any route key walks a dict schema to the same profile node, so the lookup
@@ -70,9 +71,7 @@ export function joinProviderDirectory(
       active: true,
     })
   }
-  return rows.toSorted((left, right) =>
-    (left.provider === 'deepseek-account' ? 0 : left.provider === 'deepseek-official' ? 1 : 2)
-      - (right.provider === 'deepseek-account' ? 0 : right.provider === 'deepseek-official' ? 1 : 2))
+  return rows.toSorted((left, right) => providerRank(left.provider) - providerRank(right.provider))
 }
 
 /** One provider row the page renders. */
@@ -381,12 +380,14 @@ export function onboardingReadiness(state: ModelsSettingsState): OnboardingReadi
       reason: 'load-failed',
     }
   }
-  if (state.rows.some(providerUsable)) return { kind: 'provider-ready' }
   const row = state.rows.find(candidate =>
-    candidate.entry.provider === 'deepseek-official'
-    && candidate.entry.settingsNs === 'llm-deepseek'
-    && candidate.entry.settingsPath.length === 0)
-  if (row === undefined) return { kind: 'adapter-absent' }
+    isCompanyProvider(candidate.entry.provider)
+    && candidate.entry.settingsNs === COMPANY_SETTINGS_NS
+    && candidate.entry.settingsPath.join('.') === COMPANY_SETTINGS_PATH.join('.'))
+  if (row === undefined) {
+    return state.rows.some(providerUsable) ? { kind: 'provider-ready' } : { kind: 'adapter-absent' }
+  }
+  if (providerUsable(row)) return { kind: 'provider-ready' }
   if (!row.entry.active) {
     return {
       kind: 'unavailable',

@@ -1,7 +1,7 @@
-DeepSeek Harness
-DeepSeek Harness
+CodeZ
+CodeZ
 Add an API key to get started
-Configure official DeepSeek models to start using Harness
+Configure official Zharfa models to start using CodeZ
 Enter API key [password]
 Save and continue [disabled]
 Set up later

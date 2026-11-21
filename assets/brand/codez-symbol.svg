@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024" role="img" aria-label="CodeZ">
+  <defs>
+    <linearGradient id="tile" x1="0" y1="0" x2="1024" y2="1024" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#3B0F8F"/>
+      <stop offset="0.55" stop-color="#1B1268"/>
+      <stop offset="1" stop-color="#07205C"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.46" r="0.55">
+      <stop stop-color="#8B5CF6" stop-opacity="0.34"/>
+      <stop offset="1" stop-color="#8B5CF6" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <g id="app-tile"><rect width="1024" height="1024" rx="180" fill="url(#tile)"/>
+  <rect width="1024" height="1024" rx="180" fill="url(#glow)"/></g>
+  <g id="app-mark">
+    <path d="M174.5 198.8 L741.5 198.8 L741.5 328.4 L336.5 695.6 L741.5 695.6 L741.5 825.2 L174.5 825.2 L174.5 695.6 L579.5 328.4 L174.5 328.4 Z" fill="#FFFFFF"/>
+    <rect x="763.1" y="576.8" width="86.4" height="248.4" rx="18.9" fill="#22D3EE"/>
+  </g>
+</svg>

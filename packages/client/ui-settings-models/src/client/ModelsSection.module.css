@@ -953,3 +953,127 @@ select.input {
   line-height: 20px;
   text-align: center;
 }
+
+/* Token top-up: one card after the provider rows, not another provider. */
+.credits {
+  margin-top: 4px;
+  border: 0.5px solid var(--dsw-alias-settings-card-stroke);
+  background: var(--dsw-alias-settings-card-fill);
+  border-radius: var(--dsw-radius-xl);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.creditsHead {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.creditsTitle {
+  margin: 0;
+  font-size: 14px;
+  line-height: 22px;
+  font-weight: 500;
+  color: var(--dsw-alias-label-primary);
+}
+
+.creditsBody,
+.creditsChoose {
+  margin: 0;
+  font-size: 13px;
+  line-height: 20px;
+  color: var(--dsw-alias-label-tertiary);
+}
+
+.creditsChoose {
+  color: var(--dsw-alias-label-secondary);
+}
+
+.creditsPacks {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.creditsPack {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  padding: 12px;
+  border: 0.5px solid var(--dsw-alias-border-l3);
+  border-radius: var(--dsw-radius-lg);
+  background: var(--dsw-alias-bg-layer-3);
+  color: var(--dsw-alias-label-primary);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+@media (hover: hover) {
+  .creditsPack:hover {
+    border-color: var(--dsw-alias-brand-primary);
+  }
+}
+
+.creditsPack:focus-visible {
+  outline: var(--dsw-focus-ring-width) solid var(--dsw-focus-ring-color, var(--dsw-alias-state-business-primary));
+  outline-offset: 2px;
+}
+
+.creditsPackPopular {
+  border-color: var(--dsw-alias-brand-primary);
+}
+
+.creditsBadge {
+  margin-bottom: 4px;
+  padding: 1px 6px;
+  border-radius: var(--dsw-radius-xs);
+  background: var(--dsw-alias-button-primary-fill);
+  color: var(--dsw-alias-label-primary-inverted);
+  font-size: 11px;
+  line-height: 16px;
+}
+
+.creditsTokens {
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 500;
+}
+
+.creditsPrice {
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--dsw-alias-label-secondary);
+}
+
+.creditsBuy {
+  margin-top: 6px;
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--dsw-alias-brand-primary);
+}
+
+.creditsCheckout {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 32px;
+  padding: 0 14px;
+  border-radius: var(--dsw-radius-md);
+  background: var(--dsw-alias-button-primary-fill);
+  color: var(--dsw-alias-label-primary-inverted);
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+@media (max-width: 560px) {
+  .creditsPacks {
+    grid-template-columns: 1fr;
+  }
+}

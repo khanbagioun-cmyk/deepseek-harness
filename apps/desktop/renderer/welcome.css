@@ -94,9 +94,12 @@ body {
 }
 
 .brand {
-  display: block;
+  display: flex;
   flex: none;
+  align-items: center;
+  justify-content: center;
   width: 100%;
+  width: auto;
   height: 40px;
   user-select: none;
   -webkit-user-drag: none;
