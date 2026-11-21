@@ -61,7 +61,7 @@ jobs:
         shell: pwsh
         run: |
           $dir = ".desktop-build/targets/${{ matrix.target }}/unsigned-artifacts"
-          Get-ChildItem -Recurse -File -Filter *.exe $dir | ForEach-Object {
+          Get-ChildItem -Path "$dir\codez-*-unsigned.exe" -File | ForEach-Object {
             "$((Get-FileHash $_.FullName -Algorithm SHA256).Hash.ToLower())  $($_.Name)"
           } | Set-Content SHA256SUMS
           Get-Content SHA256SUMS
