@@ -182,6 +182,18 @@ describe('hand-declared providers', () => {
     expect(resolved.get('acme-gateway')?.configuredMaxTokens.get('sized')).toBe(512)
   })
 
+  it('carries declared sampling parameters into the model request defaults', () => {
+    const samplingParams = { top_p: 0.9, top_k: 50, repetition_penalty: 1.12, frequency_penalty: 0.3 }
+    const resolved = resolveProfiles({
+      'tuned-gateway': {
+        api: 'openai-completions',
+        baseURL: 'https://tuned.test',
+        models: [{ id: 'tuned', samplingParams }],
+      },
+    })
+    expect(resolved.get('tuned-gateway')?.piProvider?.getModels()).toMatchObject([{ id: 'tuned', samplingParams }])
+  })
+
   it('takes a model’s declared modalities, then the catalog’s, then the route’s', () => {
     const vision = getBuiltinModels('anthropic').find(model => model.input.includes('image'))
     if (vision === undefined) throw new Error('the installed catalog ships no anthropic vision model')

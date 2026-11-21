@@ -27,6 +27,7 @@ import type {
   OpenAICompletionsCompat,
   OpenAIResponsesCompat,
   Provider,
+  SamplingParams,
   ThinkingLevelMap,
 } from '@earendil-works/pi-ai'
 
@@ -637,6 +638,13 @@ export interface PiAiModelProfile {
   reasoningEfforts?: false | PiAiReasoningEfforts
   /** pi-ai wire-compatibility switches for this model, winning over the route's per field; one its protocol does not declare is refused. */
   compat?: PiAiCompatProfile
+  /**
+   * Arbitrary sampling parameters merged into every request body for this
+   * model, after the named fields, so they override them. Use it for
+   * gateway-specific values pi-ai does not model, such as `top_p`, `top_k`,
+   * or `repetition_penalty`; only OpenAI-compatible protocols apply it.
+   */
+  samplingParams?: SamplingParams
 }
 
 /**
@@ -957,6 +965,9 @@ export function resolveRouteModels(
       maxTokens,
       ...resolveModelReasoning(provider, entry, base),
       ...resolveModelCompat(provider, entry, request.compat, base, api),
+      ...entry.samplingParams === undefined ? {} : {
+        samplingParams: { ...base?.samplingParams, ...entry.samplingParams },
+      },
     }
   }
   const models: Model<Api>[] = []

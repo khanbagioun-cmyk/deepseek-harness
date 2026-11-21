@@ -342,6 +342,9 @@ const modelFields = {
   // installed catalog's capability", while `false` disables reasoning.
   reasoningEfforts: z.union([z.const(false), reasoningEfforts]),
   compat: compatProfile,
+  // Passed through as-is: pi-ai owns the request-body merge, so a gateway
+  // parameter this package has never heard of needs no schema release.
+  samplingParams: z.dict(z.any()),
 }
 
 const modelProfile: z<PiAiModelProfile> = z.object({

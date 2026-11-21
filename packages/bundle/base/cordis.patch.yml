@@ -90,8 +90,8 @@
     - id: agent-default-model
       name: '@deepseek-ai/dsh-agent-default-model'
       config:
-        provider: deepseek-official
-        model: deepseek-flash
+        provider: zharfa
+        model: deepseek-v4-1-flash-1017
 
     - id: jobs
       name: '@deepseek-ai/dsh-jobs-local'
@@ -125,15 +125,72 @@
     - id: credentials
       name: '@deepseek-ai/dsh-credentials-local'
 
-    # The pi-ai multi-provider twin, mounted dormant: zero routes (and no extra
-    # models in the picker) until a `llm-pi-ai:` settings section supplies provider
-    # profiles — then those routes register live, keys resolving per request
-    # through their apiKeyEnv references, and drop again when the section empties.
-    # Supplying those profiles is exactly what the web Models page does. Which
-    # adapters exist is composition; which providers run is the user's settings
-    # document.
+    # The pi-ai multi-provider twin. The company route is composition-owned;
+    # further provider profiles arrive from the `llm-pi-ai:` settings section
+    # (the web Models page writes them), resolving keys per request through their
+    # apiKeyEnv references and dropping again when the section empties. Which
+    # adapters exist is composition; which extra providers run is the user's
+    # settings document.
     - id: llm-pi-ai
       name: '@deepseek-ai/dsh-llm-pi-ai'
+      config:
+        providers:
+          # The company API CodeZ ships with. The key resolves per request
+          # through the credential seam; the endpoint and models are fixed
+          # composition because no catalog ships this route.
+          zharfa:
+            displayName: Zharfa API
+            apiKeyEnv: AXON_LAB_KEY
+            api: openai-completions
+            baseURL: https://llm-axon.boof-ai.com/v1
+            compat:
+              thinkingFormat: deepseek
+            models:
+              - id: deepseek-v4-1-flash-1017
+                name: Zharfa
+                description: Fast company model for everyday coding and agent work.
+                contextWindow: 1048576
+                maxTokens: 256000
+                reasoningEfforts:
+                  off:
+                  high: high
+                  max: max
+              - id: glm5_3-fp8
+                name: Zharfa Pro
+                description: Stronger company model for difficult reasoning and quality-critical work.
+                contextWindow: 1048576
+                maxTokens: 256000
+                reasoningEfforts:
+                  off:
+                  high: high
+                  max: max
+
+          # The company gateway's Qwen route. It authenticates with its own key
+          # and serves a different model set, so it is a separate route rather
+          # than another model on `zharfa`.
+          zharfa-qwen:
+            displayName: Zharfa (Qwen)
+            apiKeyEnv: ZHARFA_QWEN_API_KEY
+            api: openai-completions
+            baseURL: https://api.zharfa.tech/v1
+            compat:
+              thinkingFormat: deepseek
+            models:
+              - id: qwen3.8-27b
+                name: Zharfa (qwen)
+                description: Self-hosted Qwen model for lightweight company tasks.
+                contextWindow: 32768
+                maxTokens: 8192
+                reasoningEfforts:
+                  off:
+                  low: low
+                  medium: medium
+                  xhigh: xhigh
+                samplingParams:
+                  top_p: 0.9
+                  top_k: 50
+                  repetition_penalty: 1.12
+                  frequency_penalty: 0.3
 
     - id: session-persistence-jsonl
       name: '@deepseek-ai/dsh-session-persistence-jsonl'
