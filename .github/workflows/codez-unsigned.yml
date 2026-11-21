@@ -17,10 +17,13 @@ jobs:
       matrix:
         include:
           - target: mac-arm64
+            script: package:mac:arm64:unsigned
             runner: macos-15
           - target: mac-x64
+            script: package:mac:x64:unsigned
             runner: macos-15-intel
           - target: win-x64
+            script: package:win:x64:unsigned
             runner: windows-2022
     runs-on: ${{ matrix.runner }}
     timeout-minutes: 180
@@ -33,7 +36,7 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - name: Package ${{ matrix.target }}
-        run: pnpm --filter @deepseek-ai/dsh-desktop run package:${{ matrix.target }}:unsigned
+        run: pnpm --filter @deepseek-ai/dsh-desktop run ${{ matrix.script }}
       - name: Checksums
         if: runner.os == 'macOS'
         shell: bash
