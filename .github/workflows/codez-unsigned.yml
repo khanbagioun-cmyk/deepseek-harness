@@ -53,14 +53,14 @@ jobs:
         if: runner.os == 'macOS'
         shell: bash
         run: |
-          dir=".desktop-build/targets/${{ matrix.target }}/unsigned-artifacts"
+          dir="apps/desktop/.desktop-build/targets/${{ matrix.target }}/unsigned-artifacts"
           find "$dir" -maxdepth 2 -type f -name '*.dmg' -print0 | xargs -0 shasum -a 256 > SHA256SUMS
           cat SHA256SUMS
       - name: Checksums
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
-          $dir = ".desktop-build/targets/${{ matrix.target }}/unsigned-artifacts"
+          $dir = "apps/desktop/.desktop-build/targets/${{ matrix.target }}/unsigned-artifacts"
           Get-ChildItem -Path "$dir\codez-*-unsigned.exe" -File | ForEach-Object {
             "$((Get-FileHash $_.FullName -Algorithm SHA256).Hash.ToLower())  $($_.Name)"
           } | Set-Content SHA256SUMS
@@ -69,8 +69,8 @@ jobs:
         with:
           name: codez-${{ matrix.target }}
           path: |
-            .desktop-build/targets/${{ matrix.target }}/unsigned-artifacts/**/*.dmg
-            .desktop-build/targets/${{ matrix.target }}/unsigned-artifacts/**/*.exe
+            apps/desktop/.desktop-build/targets/${{ matrix.target }}/unsigned-artifacts/**/*.dmg
+            apps/desktop/.desktop-build/targets/${{ matrix.target }}/unsigned-artifacts/**/*.exe
             SHA256SUMS
           if-no-files-found: error
           retention-days: 14
