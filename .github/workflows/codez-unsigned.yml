@@ -94,9 +94,9 @@ jobs:
           path: artifacts
       - name: Combine checksums
         run: |
-          find artifacts -name 'SHA256SUMS-*' -exec cat {} \; > SHA256SUMS
+          find artifacts -name 'SHA256SUMS-*' -exec cat {} \; > artifacts/SHA256SUMS
           cp docs/deploy/company-install/*.md artifacts/
-          cat SHA256SUMS
+          cat artifacts/SHA256SUMS
       - name: Create draft release
         env:
           GH_TOKEN: ${{ github.token }}
