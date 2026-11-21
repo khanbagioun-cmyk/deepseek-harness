@@ -1,0 +1,13 @@
+# Bilingual-pair consistency record for verify.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# After editing either side, bring the other along and re-record with:
+#   pnpm run verify-translation-pairing --write docs/deploy/company-install/verify.md
+/verify-the-download:
+  en: 559c9125e9ca18b9
+  zh: ebe70fd170840b1e
+/verify-the-download/macos:
+  en: 8359b2ddcc4d302e
+  zh: a9ff42ba084bd35c
+/verify-the-download/windows-powershell:
+  en: 6cd7d66a8d5515b7
+  zh: e8d00b00f0105bfb

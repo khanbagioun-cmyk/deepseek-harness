@@ -1,0 +1,28 @@
+# Bilingual-pair consistency record for troubleshooting.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# After editing either side, bring the other along and re-record with:
+#   pnpm run verify-translation-pairing --write docs/deploy/company-install/troubleshooting.md
+/troubleshooting:
+  en: 4764568a11f476fb
+  zh: efdca321066af16d
+/troubleshooting/macos-reports-apple-could-not-verify:
+  en: 50c7a8f62bdeeae7
+  zh: 88ca9a681dba078b
+/troubleshooting/macos-reports-damaged-after-copying:
+  en: 8899724fc1b79bcd
+  zh: db9294ceeda36172
+/troubleshooting/windows-smartscreen-blocks-the-installer:
+  en: 2ee7ddbd87ea807a
+  zh: 1139a82eeafb28e2
+/troubleshooting/the-installer-exits-immediately:
+  en: 70f23d635f285764
+  zh: 5bf557e10bc181e6
+/troubleshooting/the-app-opens-but-requests-fail:
+  en: 93a61f72b81f23e8
+  zh: 44fd3055a8e897cd
+/troubleshooting/empty-workspace-after-reinstall:
+  en: bb33f55d079d1358
+  zh: f4bf117750d4f22a
+/troubleshooting/logs:
+  en: bfbbb501dc6c2de5
+  zh: 0986266ffb616f03

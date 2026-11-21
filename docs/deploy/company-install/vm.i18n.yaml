@@ -1,0 +1,7 @@
+# Bilingual-pair consistency record for vm.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# After editing either side, bring the other along and re-record with:
+#   pnpm run verify-translation-pairing --write docs/deploy/company-install/vm.md
+/virtual-machines:
+  en: 3c4fe89ff577b526
+  zh: e586e4f7152cdbc3

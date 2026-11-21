@@ -1,0 +1,19 @@
+# Bilingual-pair consistency record for README.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# After editing either side, bring the other along and re-record with:
+#   pnpm run verify-translation-pairing --write docs/deploy/company-install/README.md
+/codez-company-install-package:
+  en: 887901fb721e0064
+  zh: 335a90b69e3a5985
+/codez-company-install-package/before-installing:
+  en: 8d858fe2a4f91016
+  zh: 2c204604f8b1f252
+/codez-company-install-package/contents:
+  en: d907f2bf0c6d6526
+  zh: 1c967cbf67fc0934
+/codez-company-install-package/limitations:
+  en: 984bf7cb8de6441a
+  zh: acc85a5a57c6c534
+/codez-company-install-package/support-information-to-collect:
+  en: aed80e32a1b4d28d
+  zh: f5ad613b3d1b33c1

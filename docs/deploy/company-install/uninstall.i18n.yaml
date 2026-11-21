@@ -1,0 +1,16 @@
+# Bilingual-pair consistency record for uninstall.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# After editing either side, bring the other along and re-record with:
+#   pnpm run verify-translation-pairing --write docs/deploy/company-install/uninstall.md
+/uninstall:
+  en: f5f93d084e4d8a4a
+  zh: 61f9e546d4a5476d
+/uninstall/macos:
+  en: 044ae55e21594721
+  zh: 48885935969bfe2a
+/uninstall/windows:
+  en: 188cecc60d66162b
+  zh: 24e18b68bc9b244b
+/uninstall/preserved-paths:
+  en: a4477c8f2b6e82a3
+  zh: a6319c75288e9457

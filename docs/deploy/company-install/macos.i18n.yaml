@@ -1,0 +1,7 @@
+# Bilingual-pair consistency record for macos.md (docs/i18n/README.md): per heading
+# section, a hash of its English and Chinese blocks outside code blocks and generated regions.
+# After editing either side, bring the other along and re-record with:
+#   pnpm run verify-translation-pairing --write docs/deploy/company-install/macos.md
+/install-on-macos:
+  en: 79c4797ba778d120
+  zh: ddf37ebac9e2988f

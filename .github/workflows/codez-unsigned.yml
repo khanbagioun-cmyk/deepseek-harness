@@ -1,0 +1,61 @@
+name: CodeZ unsigned installers
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: codez-unsigned
+  cancel-in-progress: true
+
+jobs:
+  package:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - target: mac-arm64
+            runner: macos-14
+          - target: mac-x64
+            runner: macos-15-intel
+          - target: win-x64
+            runner: windows-2022
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.9.0
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Package ${{ matrix.target }}
+        run: pnpm --filter @deepseek-ai/dsh-desktop run package:${{ matrix.target }}:unsigned
+      - name: Checksums
+        if: runner.os == 'macOS'
+        shell: bash
+        run: |
+          dir=".desktop-build/targets/${{ matrix.target }}/unsigned-artifacts"
+          find "$dir" -maxdepth 2 -type f -name '*.dmg' -print0 | xargs -0 shasum -a 256 > SHA256SUMS
+          cat SHA256SUMS
+      - name: Checksums
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $dir = ".desktop-build/targets/${{ matrix.target }}/unsigned-artifacts"
+          Get-ChildItem -Recurse -File -Filter *.exe $dir | ForEach-Object {
+            "$((Get-FileHash $_.FullName -Algorithm SHA256).Hash.ToLower())  $($_.Name)"
+          } | Set-Content SHA256SUMS
+          Get-Content SHA256SUMS
+      - uses: actions/upload-artifact@v4
+        with:
+          name: codez-${{ matrix.target }}
+          path: |
+            .desktop-build/targets/${{ matrix.target }}/unsigned-artifacts/**/*.dmg
+            .desktop-build/targets/${{ matrix.target }}/unsigned-artifacts/**/*.exe
+            SHA256SUMS
+          if-no-files-found: error
+          retention-days: 14
