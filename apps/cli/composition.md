@@ -60,6 +60,12 @@ flowchart LR
   cfg --> plugin_dsh_base_credentials
   plugin_dsh_base_llm_pi_ai["llm-pi-ai<br/>@deepseek-ai/dsh-llm-pi-ai"]
   cfg --> plugin_dsh_base_llm_pi_ai
+  plugin_dsh_base_deepseek_v4_1_flash_1017["deepseek-v4-1-flash-1017<br/>Zharfa"]
+  cfg --> plugin_dsh_base_deepseek_v4_1_flash_1017
+  plugin_dsh_base_glm5_3_fp8["glm5_3-fp8<br/>Zharfa Pro"]
+  cfg --> plugin_dsh_base_glm5_3_fp8
+  plugin_dsh_base_qwen3_8_27b["qwen3.8-27b<br/>Zharfa (qwen)"]
+  cfg --> plugin_dsh_base_qwen3_8_27b
   plugin_dsh_base_session_persistence_jsonl["session-persistence-jsonl<br/>@deepseek-ai/dsh-session-persistence-jsonl"]
   cfg --> plugin_dsh_base_session_persistence_jsonl
   plugin_dsh_base_attachment_local["attachment-local<br/>@deepseek-ai/dsh-attachment-local"]
@@ -236,6 +242,9 @@ flowchart LR
 | `deepseek-account` | `@deepseek-ai/dsh-deepseek-account-platform` |
 | `credentials` | `@deepseek-ai/dsh-credentials-local` |
 | `llm-pi-ai` | `@deepseek-ai/dsh-llm-pi-ai` |
+| `deepseek-v4-1-flash-1017` | `Zharfa` |
+| `glm5_3-fp8` | `Zharfa Pro` |
+| `qwen3.8-27b` | `Zharfa (qwen)` |
 | `session-persistence-jsonl` | `@deepseek-ai/dsh-session-persistence-jsonl` |
 | `attachment-local` | `@deepseek-ai/dsh-attachment-local` |
 | `session-query-sqlite` | `@deepseek-ai/dsh-session-query-sqlite` |

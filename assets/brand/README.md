@@ -1,5 +1,7 @@
 # CodeZ brand assets
 
+English | [中文](README.zh.md)
+
 Canonical vector sources. Run `pnpm run render:brand` after changing them; the
 command copies runtime SVGs and regenerates every raster icon and tray bitmap.
 Do not edit the generated copies.

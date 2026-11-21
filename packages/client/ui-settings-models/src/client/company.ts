@@ -7,12 +7,20 @@ export const COMPANY_SETTINGS_NS = 'llm-pi-ai'
 /** Settings path to the `zharfa` route profile. */
 export const COMPANY_SETTINGS_PATH = ['providers', COMPANY_PROVIDER] as const
 
-/** @param provider - provider id. @returns whether it is the company route. */
+/**
+ * Test whether a provider id names the company route.
+ * @param provider - provider id.
+ * @returns whether it is the company route.
+ */
 export function isCompanyProvider(provider: string): boolean {
   return provider === COMPANY_PROVIDER
 }
 
-/** @param provider - provider id. @returns its directory order; the company route leads. */
+/**
+ * Directory rank for a provider id; the company route leads.
+ * @param provider - provider id.
+ * @returns its directory order.
+ */
 export function providerRank(provider: string): number {
   if (isCompanyProvider(provider)) return 0
   if (provider === 'zharfa-qwen') return 1
