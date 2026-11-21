@@ -54,8 +54,8 @@ jobs:
         shell: bash
         run: |
           dir="apps/desktop/.desktop-build/targets/${{ matrix.target }}/unsigned-artifacts"
-          find "$dir" -maxdepth 2 -type f -name '*.dmg' -print0 | xargs -0 shasum -a 256 > SHA256SUMS
-          cat SHA256SUMS
+          find "$dir" -maxdepth 2 -type f -name '*.dmg' -print0 | xargs -0 shasum -a 256 > SHA256SUMS-${{ matrix.target }}
+          cat SHA256SUMS-${{ matrix.target }}
       - name: Checksums
         if: runner.os == 'Windows'
         shell: pwsh
@@ -63,14 +63,38 @@ jobs:
           $dir = "apps/desktop/.desktop-build/targets/${{ matrix.target }}/unsigned-artifacts"
           Get-ChildItem -Path "$dir\codez-*-unsigned.exe" -File | ForEach-Object {
             "$((Get-FileHash $_.FullName -Algorithm SHA256).Hash.ToLower())  $($_.Name)"
-          } | Set-Content SHA256SUMS
-          Get-Content SHA256SUMS
+          } | Set-Content SHA256SUMS-${{ matrix.target }}
+          Get-Content SHA256SUMS-${{ matrix.target }}
       - uses: actions/upload-artifact@v4
         with:
           name: codez-${{ matrix.target }}
           path: |
             apps/desktop/.desktop-build/targets/${{ matrix.target }}/unsigned-artifacts/**/*.dmg
             apps/desktop/.desktop-build/targets/${{ matrix.target }}/unsigned-artifacts/**/*.exe
-            SHA256SUMS
+            SHA256SUMS-${{ matrix.target }}
           if-no-files-found: error
           retention-days: 14
+
+  release:
+    needs: package
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+      - name: Combine checksums
+        run: |
+          find artifacts -name 'SHA256SUMS-*' -exec cat {} \; > SHA256SUMS
+          cp docs/deploy/company-install/*.md artifacts/
+          cat SHA256SUMS
+      - name: Create draft release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          tag="codez-v0.2.2-rc.1-company.1"
+          gh release create "$tag" --draft --target "$GITHUB_SHA" \
+            --title "CodeZ 0.2.2-rc.1 company.1" \
+            --notes-file docs/deploy/company-install/release-notes.md
+          find artifacts -type f \( -name '*.dmg' -o -name '*.exe' -o -name 'SHA256SUMS' -o -name '*.zh.md' -o -name 'README.md' -o -name 'macos.md' -o -name 'windows.md' -o -name 'uninstall.md' -o -name 'verify.md' -o -name 'vm.md' -o -name 'key.md' -o -name 'troubleshooting.md' \) -print0 \
+            | xargs -0 gh release upload "$tag"
