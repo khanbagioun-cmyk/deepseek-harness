@@ -35,6 +35,18 @@ jobs:
           node-version: 24.9.0
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      - name: Write unsigned Windows settings
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          @'
+          DSH_DESKTOP_APP_ID=com.codez.desktop
+          DSH_DESKTOP_AUTO_UPDATE_ENV=test
+          DOWNLOAD_TEST_ORIGIN=https://updates.codez.invalid
+          DOWNLOAD_TEST_RELEASE_ID=00000000000000000000000000000000
+          DSH_DESKTOP_MANDATORY_UPDATE_TEST_ORIGIN=https://updates.codez.invalid
+          DSH_DESKTOP_MANDATORY_UPDATE_CONFIG={"allowedAuthOrigins":["https://login.codez.invalid"]}
+          '@ | Set-Content apps/desktop/.env.windows -Encoding utf8
       - name: Package ${{ matrix.target }}
         run: pnpm --filter @deepseek-ai/dsh-desktop run ${{ matrix.script }}
       - name: Checksums
